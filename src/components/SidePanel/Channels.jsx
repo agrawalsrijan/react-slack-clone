@@ -10,12 +10,14 @@ import { Menu, Icon, Modal, Form, Input, Button } from "semantic-ui-react"
 
 class Channels extends Component {
     state = {
+        activeChannel: "",
         user: this.props.currentUser,
         channels: [],
         channelName: "",
         channelDetails: "", 
         modal: false,
-        channelsRef: firebase.database().ref("channels")
+        channelsRef: firebase.database().ref("channels"),
+        firstLoad: true
     }
 
     componentDidMount(){
@@ -26,8 +28,20 @@ class Channels extends Component {
         let loadedChannels = [];
         this.state.channelsRef.on('child_added', snapshot => {
             loadedChannels.push(snapshot.val());
-            this.setState({ channels: loadedChannels })
+            this.setState({ channels: loadedChannels }, () => this.setFirstChannel())
         })
+    }
+
+// set first channel by default on page/app load
+
+    setFirstChannel = () => {
+        const { firstLoad, channels } = this.state
+        const firstChannel = channels[0]
+        if(firstLoad && channels.length > 0){
+            this.props.setCurrentChannel(firstChannel)
+            this.setActiveChannel(firstChannel);
+        }
+        this.setState({ firstLoad: false });
     }
 
 // handle input change    
@@ -99,6 +113,7 @@ class Channels extends Component {
                 onClick={() => this.changeChannel(channel)}
                 name={channel.name}
                 style={{ opacity: 0.7 }}
+                active={ channel.id === this.state.activeChannel }
             >
                 # {channel.name}
 
@@ -107,7 +122,12 @@ class Channels extends Component {
     )
 // change channel
     changeChannel = channel => {
+        this.setActiveChannel(channel);
         this.props.setCurrentChannel(channel);
+    }
+
+    setActiveChannel = channel => {
+        this.setState({ activeChannel: channel.id });
     }
 
 

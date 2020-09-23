@@ -8,7 +8,7 @@ import { Provider, connect } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import logger from "redux-logger";
 import rootReducer from "./reducers/index";
-import { setUser } from "./actions/index"
+import { setUser, clearUser } from "./actions/index"
 
 // Firebase related imports
 import firebase from "./firebase"
@@ -39,6 +39,9 @@ class Root extends Component{
       if(user){
         this.props.setUser(user)
         this.props.history.push("/");
+      }else{
+        this.props.history.push("/login");
+        this.props.clearUser()
       }
     })
   }
@@ -62,7 +65,7 @@ const mapStateToProps = (state) => {
     isLoading: state.user.isLoading
   }
 }
-const RootWithAuth = withRouter(connect(mapStateToProps, { setUser })(Root));
+const RootWithAuth = withRouter(connect(mapStateToProps, { setUser, clearUser })(Root));
 
 ReactDOM.render(
   <Provider store={store}>

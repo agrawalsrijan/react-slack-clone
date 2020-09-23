@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 
+// import { connect } from "react-redux"
+
+// Firebase imports
 import firebase from "../../firebase.js";
 
-import { Dropdown, Grid, Header, Icon } from "semantic-ui-react"
+// Semantic UI imports
+import { Dropdown, Grid, Header, Icon, Image } from "semantic-ui-react"
 
 class UserPanel extends Component{
 
+    state = {
+        user: this.props.currentUser
+    }
 
+// Dropwdown Menu Options
     dropdownOptions = () => {
+        const { user } = this.state
         return [
             {
                 key: "user",
-                text : <span>Signed in as <strong>User</strong></span>,
+                text : <span>Signed in as <strong>{user.displayName}</strong></span>,
                 disabled: true
             },
             {
@@ -25,6 +34,7 @@ class UserPanel extends Component{
         ]
     }
 
+// Handle signout functionality
     handleSignout = () => {
         firebase
             .auth()
@@ -33,6 +43,7 @@ class UserPanel extends Component{
     }
 
     render(){
+        const { user } = this.state
         return(
             <Grid style={{ background: "#4c3c4c" }} >
                 <Grid.Column>
@@ -42,15 +53,28 @@ class UserPanel extends Component{
                             <Icon name="code" />
                             <Header.Content>Slick</Header.Content>
                         </Header>
+
+                        {/* User DropDown */}
+                        <Header style={{ padding: "0.25em" }} as="h4" inverted>
+                            <Dropdown
+                                trigger={
+                                    <span>
+                                        <Image
+                                            src={user.photoURL}
+                                            spaced="right"
+                                            avatar
+                                        />
+
+                                        {user.displayName}
+                                    </span>
+                                }
+                                options={this.dropdownOptions()}
+                            />
+                        </Header>
+
                     </Grid.Row>
 
-                    {/* User DropDown */}
-                    <Header style={{ padding: "0.25em" }} as="h4" inverted>
-                        <Dropdown 
-                            trigger={<span>User</span>}
-                            options={this.dropdownOptions()} 
-                        />
-                    </Header>
+                 
 
                 </Grid.Column>
             </Grid>
@@ -58,6 +82,11 @@ class UserPanel extends Component{
     }
 }
 
-
+// const mapStateToProps = state => {
+//     return{
+//         currentUser: state.user.currentUser
+//     }
+    
+// }
 
 export default UserPanel

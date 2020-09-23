@@ -24,6 +24,10 @@ class Channels extends Component {
         this.addListeners()
     }
 
+    componentWillUnmount() {
+        this.removeListeners();
+    }
+
     addListeners = () => {
         let loadedChannels = [];
         this.state.channelsRef.on('child_added', snapshot => {
@@ -31,6 +35,10 @@ class Channels extends Component {
             this.setState({ channels: loadedChannels }, () => this.setFirstChannel())
         })
     }
+
+    removeListeners = () => {
+        this.state.channelsRef.off();
+    };
 
 // set first channel by default on page/app load
 

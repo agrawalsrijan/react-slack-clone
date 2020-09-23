@@ -62,7 +62,7 @@ class MessageForm extends Component {
     }
 
     render() {
-        const { errors, message } = this.state
+        const { errors, message, loading } = this.state
         return (
             <Segment className="message__form" >
                 <Input
@@ -89,6 +89,7 @@ class MessageForm extends Component {
                         content="Add Reply"
                         labelPosition="left"
                         icon="edit"
+                        disabled={loading}
                     />
 
 

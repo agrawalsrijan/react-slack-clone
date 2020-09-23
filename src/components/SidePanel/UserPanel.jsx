@@ -55,7 +55,7 @@ class UserPanel extends Component{
                         </Header>
 
                         {/* User DropDown */}
-                        <Header style={{ padding: "0.25em" }} as="h4" inverted>
+                        <Header style={{ padding: "0.25em", marginTop: "4rem" }} as="h4" inverted>
                             <Dropdown
                                 trigger={
                                     <span>

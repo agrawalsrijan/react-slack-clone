@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 
+import {connect} from "react-redux"
+
+import {setCurrentChannel} from "../../actions/index"
+
 import firebase from "../../firebase"
 
 import { Menu, Icon, Modal, Form, Input, Button } from "semantic-ui-react"
@@ -12,6 +16,18 @@ class Channels extends Component {
         channelDetails: "", 
         modal: false,
         channelsRef: firebase.database().ref("channels")
+    }
+
+    componentDidMount(){
+        this.addListeners()
+    }
+
+    addListeners = () => {
+        let loadedChannels = [];
+        this.state.channelsRef.on('child_added', snapshot => {
+            loadedChannels.push(snapshot.val());
+            this.setState({ channels: loadedChannels })
+        })
     }
 
 // handle input change    
@@ -75,6 +91,25 @@ class Channels extends Component {
         this.setState({ modal: false })
     }
 
+// display channels
+    displayChannels = channels => (
+        channels.length > 0 && channels.map(channel => (
+            <Menu.Item
+                key={channel.id}
+                onClick={() => this.changeChannel(channel)}
+                name={channel.name}
+                style={{ opacity: 0.7 }}
+            >
+                # {channel.name}
+
+            </Menu.Item>
+        ))
+    )
+// change channel
+    changeChannel = channel => {
+        this.props.setCurrentChannel(channel);
+    }
+
 
     render(){
         const { channels, modal } = this.state
@@ -88,6 +123,7 @@ class Channels extends Component {
                      ({channels.length}) <Icon name="add" onClick={this.openModal} />
                     </Menu.Item>
                     {/* Channels show */}
+                    { this.displayChannels(channels) }
                 </Menu.Menu>
 
 
@@ -137,4 +173,7 @@ class Channels extends Component {
     }
 }
 
-export default Channels
+export default connect(
+    null, 
+    { setCurrentChannel }
+)(Channels);

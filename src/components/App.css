@@ -19,7 +19,7 @@ body,
     margin-left: 320px !important;
     left: 0;
     right: 1em;
-    z-index: 200;
+    /* z-index: 200; */
 }
 
 /* Message.js */
@@ -27,4 +27,9 @@ body,
 .message__self{
     border-left: 2px solid orange;
     padding-left: 8px;
+}
+
+.message__image {
+    padding: 1em;
+    
 }

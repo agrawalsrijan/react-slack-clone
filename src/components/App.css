@@ -15,7 +15,7 @@ body,
 
 /* Messages.js */
 .messages{
-    height: 62vh;
+    height: 58vh;
     overflow-y: scroll;
 }
 
@@ -28,10 +28,10 @@ body,
 .message__form{
     position: fixed !important;
     bottom: 1em;
-    margin-left: 320px !important;
+    margin-left: 270px !important;
     left: 0;
     right: 1em;
-    /* z-index: 200; */
+    z-index: 200;
 }
 
 /* Message.js */
